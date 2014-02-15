@@ -1,0 +1,7 @@
+session Rpc =
+  role c : int = 
+    send Request : string ;
+    recv Reply : int
+  role w : unit = 
+    recv Request : string -> 
+    send Reply : int 

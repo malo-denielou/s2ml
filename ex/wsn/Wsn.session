@@ -1,0 +1,15 @@
+session Wsn =
+  role c : unit = 
+    send Request : string;
+    loop:
+    recv 
+    [ Reply : int -> 
+      send Extra : string ; loop
+    | Fault ]
+  role w : string = 
+    recv Request : string -> 
+    loop:
+    send 
+    ( Reply : int ; 
+      recv Extra : string -> loop
+    + Fault )

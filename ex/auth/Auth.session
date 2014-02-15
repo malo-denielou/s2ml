@@ -1,0 +1,42 @@
+session Auth =
+  role c : int = 
+    send Request : string ;
+    recv Reply : int
+  role a : unit = 
+    recv Request : string -> 
+    send Auth ;
+    recv Ok ->
+    send Forward : string
+  role w : unit = 
+    recv Forward : string -> 
+    send Reply : int
+  role d : unit = 
+    recv Auth ->
+    send Ok 
+
+(*
+  role c : int = 
+    send Request : string ;
+    recv Reply : int
+  role a : unit = 
+    recv Request : string -> 
+    loop:
+    send 
+    ( Auth ;
+      recv Ok ->
+      send Forward : string
+    + Correct:string ;
+      recv Yes -> loop 
+    )
+  role w : unit = 
+    recv Forward : string -> 
+    send Reply : int
+  role d : unit = 
+    loop:
+    recv 
+    [ Auth ->
+      send Ok 
+    | Correct:string ->
+      send Yes
+    ]
+*)

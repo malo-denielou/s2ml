@@ -1,0 +1,10 @@
+(* Global constants and functions *)
+
+type rel = Before of int * int
+
+val set_debug : bool -> unit
+val debug : string -> string -> unit
+val test_eq : (x:'a) -> (y:'b) -> string -> unit{x=y}
+val test_inf : (x:int) -> (y:int) -> string -> unit{Before(x,y)}
+
+

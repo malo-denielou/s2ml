@@ -1,0 +1,29 @@
+session Shopping =
+  role c:unit =
+   send Request:string;
+   start:
+   recv 
+   [ Offer:string ->
+      send ( Change:string; start
+           + Accept:unit )
+   |  Reject:string ->  send Abort:unit 
+   ]
+
+  role o:unit =
+    recv Request:string ->
+    send Contract:string ;
+    recv
+    [ Confirm:unit 
+    | Abort:unit 
+    ]
+  
+  role w:string =
+    recv Contract:string ->
+    loop:
+    send
+    ( Offer:string ;
+      recv
+      [ Change:string -> loop
+      |  Accept:unit -> send Confirm:unit 
+      ]
+    +  Reject:string )

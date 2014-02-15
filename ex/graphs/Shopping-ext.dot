@@ -1,0 +1,54 @@
+digraph G {
+  rankdir=TB; fontsize=10; margin = 0; nodesep=0.1;ranksep=0.2;
+
+  0 -> 1 [label="Request"];
+  2 -> 3 [label="Request"];
+  1 [label="c: Request"];
+  3 [label="o: Request",peripheries=2];
+  0 [label="c: start",peripheries=2];
+  {rank = min; 0;}
+  2 [label="o: start"];
+  {rank = min; 2;}
+  3 -> 4 [label="Contract"];
+  4 [label="o: RequestContract"];
+  3 [label="o: Request",peripheries=2];
+  1 -> 8 [label="Reject"];
+  8 [label="c: ContractReject",peripheries=2];
+  1 [label="c: Request"];
+  8 -> 9 [label="Abort"];
+  4 -> 10 [label="Abort"];
+  9 [label="c: RejectAbort"];
+  10 [label="o: RejectAbort",peripheries=2];
+  8 [label="c: ContractReject",peripheries=2];
+  4 [label="o: RequestContract"];
+  1 -> 12 [label="Offer"];
+  12 [label="c: ContractOffer",peripheries=2];
+  1 [label="c: Request"];
+  12 -> 13 [label="Accept"];
+  13 [label="c: Accept"];
+  12 [label="c: ContractOffer",peripheries=2];
+  12 -> 15 [label="Change"];
+  15 [label="c: Change"];
+  12 [label="c: ContractOffer",peripheries=2];
+  15 -> 18 [label="Offer"];
+  18 [label="c: Offer",peripheries=2];
+  15 [label="c: Change"];
+  18 -> 13 [label="Accept"];
+  13 [label="c: Accept"];
+  18 [label="c: Offer",peripheries=2];
+  4 -> 20 [label="Confirm"];
+  20 [label="o: AcceptConfirm",peripheries=2];
+  4 [label="o: RequestContract"];
+  18 -> 15 [label="Change"];
+  15 [label="c: Change"];
+  18 [label="c: Offer",peripheries=2];
+  15 -> 22 [label="Reject"];
+  22 [label="c: Reject",peripheries=2];
+  15 [label="c: Change"];
+  22 -> 9 [label="Abort"];
+  4 -> 10 [label="Abort"];
+  9 [label="c: RejectAbort"];
+  10 [label="o: RejectAbort",peripheries=2];
+  22 [label="c: Reject",peripheries=2];
+  4 [label="o: RequestContract"];
+}

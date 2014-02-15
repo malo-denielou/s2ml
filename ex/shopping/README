@@ -1,0 +1,40 @@
+Example 3
+=========
+
+Files:
+
+S3.session            Local session roles code
+example3c.ml          Customer user code
+example3s.ml          Store user code
+example3o.ml          Officer user code
+example3a.ml          Symbolic user code
+
+BUILDING INSTRUCTIONS
+=====================
+
+'make'     to build the concrete and symbolic Ocaml executables
+           creates the following files:
+                   * example3c.exe
+                   * example3c-bc.exe
+                   * example3s.exe
+                   * example3s-bc.exe
+                   * example3o.exe
+                   * example3o-bc.exe
+                   * example3a.exe
+                   * example3a-bc.exe
+
+'make fs'  to build the concrete F# executable
+           creates the following files:
+                   * example3c.exe
+                   * example3s.exe
+                   * example3o.exe
+
+RUNNING INSTRUCTIONS
+====================
+
+Concrete run:   In 3 different terminals, run example3s.exe and example3o.exe,
+                and only then example3c.exe. If the Ocaml version was built, it
+                is possible to use the bytecode versions in the same way.
+
+Symbolic run:   Run example3a.exe in a terminal.
+

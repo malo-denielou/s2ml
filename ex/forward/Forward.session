@@ -1,0 +1,10 @@
+session Forward =
+  role c : int = 
+    send Request : string ;
+    recv Reply : int
+  role p : unit = 
+    recv Request : string -> 
+    send Forward : string
+  role w : unit = 
+    recv Forward : string -> 
+    send Reply : int 

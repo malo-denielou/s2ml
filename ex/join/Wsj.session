@@ -1,0 +1,9 @@
+session Wsj =
+  role c = 
+    send (Foo{c,p,w} + Bar{c,p,w} )
+  role p = 
+    recv 
+    [ Foo{c,p,w} -> join: send Ok  
+    | Bar{c,p,w} -> join]
+  role w = 
+    recv Ok{c,p,w} 

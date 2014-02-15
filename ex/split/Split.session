@@ -1,0 +1,15 @@
+
+session Split =
+
+  var q : int
+
+  role c = 
+    send Write {q,c,s,r}
+
+  role s = 
+    recv Write {q,c,s,r} -> 
+    send (Fwd + Rebind {q}) 
+
+  role r =
+    recv [ Fwd{c,s,r} | Rebind {q,c,s,r} ]
+

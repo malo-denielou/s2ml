@@ -1,0 +1,5 @@
+session Single =
+  role c : unit = 
+    send Request : string
+  role w : string = 
+    recv Request : string

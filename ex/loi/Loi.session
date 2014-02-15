@@ -1,0 +1,94 @@
+session Loi =
+  role ministre = 
+    send ProjetLoi : string ;
+    recv ConseilMinistre : string ->
+    conseildesministres:
+    send Expose : string ;
+    recv
+    [ Questions : string-> conseildesministres
+    | Adopte -> send PassageCommission : string ]
+  role conseildetat =
+    avis:
+    recv Soumission : string ->
+    send 
+    ( AvisPositif
+    + AvisNegatif :string ; avis
+    )
+  role gouvernement = 
+    recv ProjetLoi : string -> 
+    conseil:
+    send Soumission : string ;
+    recv
+    [ AvisNegatif : string -> conseil
+    | AvisPositif -> 
+      send ConseilMinistre : string ;
+      conseildesministres:
+      recv Expose : string ->
+      send 
+      ( Questions : string ; conseildesministres
+      + Adopte ;
+        seance:
+        recv 
+        [ Audition -> send Reponse : string ; seance
+        | TexteFinal
+        | Echec
+        ]
+      )
+    ]
+  role commission =
+    recv PassageCommission : string ->
+    send TextePropose : string
+  role assemblee =
+    saisie:
+    recv TextePropose : string ->
+    depart:
+    send DebutSeance : string ;
+    seance:
+    recv
+    [ AuditionGouv -> send Audition ; 
+      recv Reponse : string -> 
+      send Parole ; seance
+    | Exception ->
+      send VoteException ;
+      recv 
+      [ ExceptionRejetee -> depart
+      | ExceptionAcceptee -> fin
+      ]
+    | Amendement : string ->
+      send VoteAmendement ;
+      recv 
+      [ AmendementRejete -> depart
+      | AmendementAccepte : string-> depart
+      ]
+    | Texte : string ->
+      send Vote ;
+      recv
+      [ Approuve -> send TexteFinal
+      | Rejete -> fin: send Echec
+      ]
+    ]
+  role depute =
+    depart:
+    recv DebutSeance : string ->
+    seance:
+    send 
+    ( AuditionGouv ; recv Parole -> seance
+    + Exception ; 
+      recv VoteException -> 
+      send
+      ( ExceptionRejetee ; depart
+      + ExceptionAcceptee
+      )
+    + Amendement : string ;
+      recv VoteAmendement -> 
+      send
+      ( AmendementRejete ; depart
+      + AmendementAccepte : string ; depart
+      )
+    + Texte : string ;
+      recv Vote -> 
+      send
+      ( Approuve ;
+      + Rejete
+      )
+    )

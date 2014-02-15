@@ -1,0 +1,7 @@
+session Ws =
+  role c : unit = 
+    send Request : string ;
+    recv [ Reply : int | Fault ]
+  role w : string =
+    recv Request : string -> 
+    send ( Reply : int + Fault )

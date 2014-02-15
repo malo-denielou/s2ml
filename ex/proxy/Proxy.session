@@ -1,0 +1,24 @@
+session Proxy =
+
+  role c = 
+    send Request ;
+    recv Reply 
+
+  role p =
+    recv Request ->
+    send 
+    ( Forward
+    + Audit;
+      loop:
+      recv Details ->
+      send ( Retry ; loop + Resume ))
+
+  role w =
+    recv 
+    [ Forward  ->
+      end:
+      send Reply 
+    | Audit ->
+      loop: 
+      send Details ;
+      recv [ Retry  -> loop | Resume -> end] ]

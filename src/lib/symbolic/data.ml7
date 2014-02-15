@@ -1,0 +1,48 @@
+private type str =
+    | Literal of string
+    | Base64 of bytes
+        
+and bytes = 
+    | Concat of bytes * bytes
+    | Utf8 of str
+    | Bin of blob
+
+and blob = 
+    | Hash of bytes
+    | Nonce of bytes
+    | AsymSign of bytes * bytes
+    | AsymEncrypt of bytes * bytes
+    | SymEncrypt of bytes * bytes
+    | Mac of bytes * bytes
+
+type 'a pickled
+val pickle: x:'a -> (p:'a pickled)
+val unpickle: p:'a pickled -> (x:'a)
+
+val hash : bytes -> bytes
+val ihash : bytes -> bytes
+val sign : bytes -> bytes -> bytes
+val isign : bytes -> bytes * bytes
+val encr : bytes -> bytes -> bytes 
+val iencr : bytes -> bytes * bytes
+val asym_encr : bytes -> bytes -> bytes 
+val asym_iencr : bytes -> bytes * bytes
+val mac : bytes -> bytes -> bytes 
+val imac : bytes -> bytes * bytes
+
+val base64 : b:bytes -> s:str{s = Base64(b)}
+val ibase64 : s:str -> b:bytes{s = Base64(b)}
+val utf8 : s:str -> b:bytes{b = Utf8(s)}
+val iutf8 : b:bytes -> s:str{b = Utf8(s)}
+val concat : x:bytes -> y:bytes -> z:bytes{z = Concat(x,y)}
+val iconcat : z:bytes -> (x:bytes * y:bytes){z = Concat(x,y)}
+val concat3 : x:bytes -> y:bytes -> z:bytes -> w:bytes{w = Concat(x,Concat(y,z))}
+val iconcat3 : w:bytes -> (x:bytes * y:bytes * z:bytes){w = Concat(x,Concat(y,z))}
+
+val cS : c:string -> s:str{s = Literal(c)}
+val iS : s:str -> c:string{s = Literal(c)}
+
+val spstr: str -> string
+val spbytes: bytes -> string 
+val spmmac: bytes -> string
+val spmsg: str -> string

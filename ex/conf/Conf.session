@@ -1,0 +1,47 @@
+session Conf =
+  role pc  = 
+    send Cfp:string ;
+    start:
+    recv [ Paper:string ->  
+           send ( Close;
+                  recv Done ->
+                  discuss:
+                  send ( Accept:string ; 
+                         recv FinalVersion:string
+                       + Reject
+                       + Shepherd:string ;
+                         recv Rebuttal:string ->
+                         discuss  )
+                + ReqRevision:string; start ) 
+         | Retract]
+  role author : string =
+    recv Cfp:string ->
+    start:
+    send Upload:string ; 
+    recv [ BadFormat:string -> start
+         | Ok -> subm : 
+           send (Submit:string;
+                 discuss  :
+                 recv [ Accept:string -> 
+                        send FinalVersion:string
+                      | Reject
+                      | Shepherd:string -> 
+                        send Rebuttal:string ; discuss 
+	              | Revise  -> subm ]
+                   + Withdraw) ]
+  role confman =
+    start :
+    recv Upload:string ->
+    send ( Ok;
+           subm: 
+           recv [ Submit:string -> 
+                  send Paper:string; 
+                  recv [
+                  | Close -> send Done
+                  | ReqRevision:string -> 
+                    send Revise ; subm
+                  ]
+                | Withdraw -> send Retract
+                ]
+         + BadFormat:string;
+           start)

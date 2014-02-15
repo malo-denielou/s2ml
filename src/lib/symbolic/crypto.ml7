@@ -1,0 +1,26 @@
+open Data
+
+type 'a hkey
+type 'a symkey
+
+val mkNonce : unit -> Data.bytes
+val sha1 : b:Data.bytes -> h:Data.bytes{h = Hash(b)}
+val sha1_verify : b:Data.bytes -> h:Data.bytes -> unit{h = Hash(b)}
+val rsa_sign : Data.bytes -> Data.bytes -> Data.bytes
+val rsa_encrypt : Data.bytes -> Data.bytes -> Data.bytes
+val rsa_decrypt : Data.bytes -> Data.bytes -> Data.bytes
+val rsa_verify : Data.bytes -> Data.bytes -> Data.bytes -> unit
+
+val mac : 'a hkey -> 'a pickled -> Data.bytes
+  (* Data.bytes -> Data.bytes -> Data.bytes *)
+val mac_verify : 'a hkey -> Data.bytes -> Data.bytes -> 'a pickled 
+  (* Data.bytes -> Data.bytes -> Data.bytes -> unit *)
+
+val sym_encrypt : 'a symkey -> 'a pickled -> Data.bytes
+  (* Data.bytes -> Data.bytes -> Data.bytes *)
+val sym_decrypt : 'a symkey -> Data.bytes -> 'a pickled 
+  (* Data.bytes -> Data.bytes -> Data.bytes *)
+
+type 'a pred = P of 'a
+val pickle: x:'a -> p:'a pickled{p = P(x)}
+val unpickle: p:'a pickled -> x:'a{p = P(x)}
